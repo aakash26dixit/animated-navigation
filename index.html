@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="main.css">
+    <script src="index.js"></script>
+</head>
+
+<body data-barba="wrapper">
+    <ul class="transition">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
+
+    <div class="wrapper">
+        <header>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="services.html">Services</a></li>
+                </ul>
+            </nav>
+        </header>
+        <main data-barba="container" data-barba-namespace="home">
+            <div class="left">
+                <h1>An Ongoing Experience</h1>
+                <a href="services.html" class="cta">Take me there</a>
+            </div>
+            <img src="bmw.jfif" alt="Interior">
+        </main>
+    </div>
+
+    <script src="https://unpkg.com/@barba/core"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.4/gsap.min.js"
+        integrity="sha512-VEBjfxWUOyzl0bAwh4gdLEaQyDYPvLrZql3pw1ifgb6fhEvZl9iDDehwHZ+dsMzA0Jfww8Xt7COSZuJ/slxc4Q=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
+    <script>
+
+        function pageTransition() {
+            var t1 = gsap.timeline();
+            
+            t1.to('ul.transition li', { duration: .5, scaleY: 1, transformOrigin: "top right", stagger: .2 })
+
+            t1.to('ul.transition li', { duration: .5, scaleY: 0, transformOrigin: "top right", stagger: .1, delay: .1 })
+        }
+
+
+        function contentAnimation() {
+            var t1 = gsap.timeline();
+            t1.from('.left', { duration: 1.5, translateY: 50, opacity: 0 })
+            // t1.to('img', { clipPath: "polygon(0 0, 100% 0, 100% 0, 0 0)" })
+        }
+
+
+        function delay(n) {
+            n = n || 2000;
+            return new Promise(done => {
+                setTimeout(() => {
+                    done();
+                }, n);
+            });
+        }
+
+        barba.init({
+            sync: true,
+
+            transitions: [{
+                async leave(data) {
+                    const done = this.async();
+                    pageTransition();
+                    await delay(1500);
+                    done();
+                },
+
+                async enter(data) {
+                    contentAnimation();
+                },
+
+                async once(data) {
+                    contentAnimation();
+                }
+            }]
+        })
+    </script>
+</body>
+
+</html>
